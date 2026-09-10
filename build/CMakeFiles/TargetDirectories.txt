@@ -1,7 +1,0 @@
-/home/banis/project_miquland/miqumusic/build/CMakeFiles/miqumusic.dir
-/home/banis/project_miquland/miqumusic/build/CMakeFiles/edit_cache.dir
-/home/banis/project_miquland/miqumusic/build/CMakeFiles/rebuild_cache.dir
-/home/banis/project_miquland/miqumusic/build/CMakeFiles/list_install_components.dir
-/home/banis/project_miquland/miqumusic/build/CMakeFiles/install.dir
-/home/banis/project_miquland/miqumusic/build/CMakeFiles/install/local.dir
-/home/banis/project_miquland/miqumusic/build/CMakeFiles/install/strip.dir

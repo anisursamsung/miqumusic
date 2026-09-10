@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-218a84b04028dc08dca773905b42951c generated/EmbeddedArtwork.cpp
-e8b95e6c94b80b9a94143ae950bc405f generated/EmbeddedFont.cpp
