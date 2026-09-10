@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=MiquMusic
+GenericName=Music Player
+Comment=Native Wayland MPD client for Miquland
+Exec=miqumusic %F
+Icon=multimedia-audio-player
+Terminal=false
+Categories=Audio;Music;Player;AudioVideo;
+Keywords=music;player;mpd;audio;wayland;miqumusic;miquland;
+MimeType=audio/mpeg;audio/flac;audio/ogg;audio/wav;audio/mp4;audio/aac;audio/x-matroska;audio/x-flac;audio/x-vorbis+ogg;
