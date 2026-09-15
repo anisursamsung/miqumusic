@@ -14,10 +14,9 @@ echo "==> Build finished successfully! Binary is at $BUILD_DIR/miqumusic"
 
 # If invoked with sudo/root, automatically install to system
 if [ "${EUID}" -eq 0 ]; then
-    echo "==> Installing miqumusic to system (/usr/bin/miqumusic)..."
+    echo "==> Installing miqumusic to system (/usr/bin)..."
     cmake --install "$BUILD_DIR"
-    update-desktop-database /usr/share/applications 2>/dev/null || true
-    echo "==> miqumusic successfully installed to /usr!"
+    echo "==> miqumusic successfully installed to /usr/bin/miqumusic"
 else
-    echo "==> Built locally in $BUILD_DIR. To install system-wide, run: sudo ./make.sh"
+    echo "==> To install system-wide, run: sudo ./make.sh"
 fi
