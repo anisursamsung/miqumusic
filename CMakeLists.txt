@@ -16,8 +16,14 @@ pkg_check_modules(LIBMPDCLIENT REQUIRED IMPORTED_TARGET libmpdclient)
 
 add_executable(miqumusic
     src/main.cpp
+    src/music_app.cpp
     src/mpd_client.cpp
     src/art_loader.cpp
+    src/ui/player_view.cpp
+    src/ui/queue_view.cpp
+    src/ui/library_view.cpp
+    src/ui/artists_view.cpp
+    src/ui/settings_view.cpp
 )
 
 target_include_directories(miqumusic PRIVATE
