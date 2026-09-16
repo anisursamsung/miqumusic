@@ -16,6 +16,7 @@ ArtistsView::ArtistsView() : LinearLayout(Orientation::Vertical) {
         static_cast<int>(LayoutDimension::MatchParent),
         static_cast<int>(LayoutDimension::WrapContent)
     ));
+    m_items_layout->set_padding(0, 4, 0, 20);
 
     auto scroll = ScrollViewBuilder::create()
         ->contentView(m_items_layout)
