@@ -21,7 +21,8 @@ public:
     }
 
 private:
-    std::shared_ptr<miqu::LinearLayout> m_items_layout;
+    std::shared_ptr<miqu::ListView> m_list_view;
+    std::vector<std::string> m_first_uris;
     std::function<void(const std::string&)> m_on_artist_play;
     bool m_loaded = false;
 };

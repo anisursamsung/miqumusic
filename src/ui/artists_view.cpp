@@ -11,108 +11,58 @@ ArtistsView::ArtistsView() : LinearLayout(Orientation::Vertical) {
         static_cast<int>(LayoutDimension::MatchParent)
     ));
 
-    m_items_layout = std::make_shared<LinearLayout>(Orientation::Vertical);
-    m_items_layout->set_layout_params(LayoutParams(
-        static_cast<int>(LayoutDimension::MatchParent),
-        static_cast<int>(LayoutDimension::WrapContent)
-    ));
-    m_items_layout->set_padding(0, 4, 0, 20);
-
-    auto scroll = ScrollViewBuilder::create()
-        ->contentView(m_items_layout)
-        ->scrollbar(true)
+    m_list_view = ListViewBuilder::create()
+        ->itemHeight(50)
+        ->spacing(2)
+        ->itemCornerRadius(8)
+        ->onItemClick([this](size_t index, std::shared_ptr<View>) {
+            if (index < m_first_uris.size() && m_on_artist_play) {
+                m_on_artist_play(m_first_uris[index]);
+            }
+        })
         ->build();
-    scroll->set_layout_params(LayoutParams(
+
+    m_list_view->set_layout_params(LayoutParams(
         static_cast<int>(LayoutDimension::MatchParent),
         static_cast<int>(LayoutDimension::MatchParent)
     ));
-    add_view(scroll);
+    add_view(m_list_view);
 }
 
 void ArtistsView::load_artists(const std::vector<Song>& all_songs) {
-    m_items_layout->clear_views();
+    m_first_uris.clear();
 
     std::map<std::string, std::vector<Song>> artists_map;
     for (const auto& s : all_songs) {
         artists_map[s.display_artist()].push_back(s);
     }
 
+    m_first_uris.reserve(artists_map.size());
+    std::vector<std::shared_ptr<View>> items;
+    items.reserve(artists_map.size());
+
     for (const auto& pair : artists_map) {
         const std::string& artist_name = pair.first;
         const auto& songs = pair.second;
 
-        auto row = std::make_shared<LinearLayout>(Orientation::Horizontal);
-        row->set_layout_params(LayoutParams(
-            static_cast<int>(LayoutDimension::MatchParent),
-            static_cast<int>(LayoutDimension::WrapContent)
-        ));
-        row->set_padding(10, 8);
-        row->set_margin(0, 1, 0, 1);
+        if (!songs.empty()) {
+            m_first_uris.push_back(songs[0].uri);
+        } else {
+            m_first_uris.push_back("");
+        }
 
-        auto icon_lbl = TextViewBuilder::create()
-            ->text("👤")
-            ->caption(true)
-            ->muted(true)
-            ->build();
-        icon_lbl->set_layout_params(LayoutParams(
-            26,
-            static_cast<int>(LayoutDimension::WrapContent)
-        ));
+        std::string sub = std::to_string(songs.size()) + (songs.size() == 1 ? " track" : " tracks");
 
-        auto text_col = std::make_shared<LinearLayout>(Orientation::Vertical);
-        text_col->set_layout_params(LayoutParams(
-            0,
-            static_cast<int>(LayoutDimension::WrapContent),
-            1.0f
-        ));
-        text_col->set_margin(6, 0, 6, 0);
-
-        auto name_lbl = TextViewBuilder::create()
-            ->text(artist_name)
-            ->bold(true)
-            ->ellipsize(true)
-            ->build();
-        name_lbl->set_layout_params(LayoutParams(
-            static_cast<int>(LayoutDimension::MatchParent),
-            static_cast<int>(LayoutDimension::WrapContent)
-        ));
-
-        auto count_lbl = TextViewBuilder::create()
-            ->text(std::to_string(songs.size()) + (songs.size() == 1 ? " track" : " tracks"))
-            ->caption(true)
-            ->muted(true)
-            ->build();
-        count_lbl->set_layout_params(LayoutParams(
-            static_cast<int>(LayoutDimension::MatchParent),
-            static_cast<int>(LayoutDimension::WrapContent)
-        ));
-
-        text_col->add_view(name_lbl);
-        text_col->add_view(count_lbl);
-
-        auto play_btn = ButtonBuilder::create()
-            ->text("▶")
-            ->flat(true)
-            ->padding(6, 4)
+        auto item = ListItemViewBuilder::create()
+            ->title(artist_name)
+            ->subtitle(sub)
+            ->trailingText("▶")
             ->build();
 
-        row->add_view(icon_lbl);
-        row->add_view(text_col);
-        row->add_view(play_btn);
-
-        std::string first_uri = songs.empty() ? "" : songs[0].uri;
-        auto play_action = [this, first_uri]() {
-            if (m_on_artist_play && !first_uri.empty()) {
-                m_on_artist_play(first_uri);
-            }
-        };
-
-        row->set_on_click_listener(play_action);
-        play_btn->set_on_click_listener(play_action);
-
-        m_items_layout->add_view(row);
+        items.push_back(item);
     }
 
+    m_list_view->set_items(std::move(items));
     m_loaded = true;
 }
 

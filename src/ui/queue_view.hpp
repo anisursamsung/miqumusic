@@ -20,7 +20,8 @@ public:
     }
 
 private:
-    std::shared_ptr<miqu::LinearLayout> m_items_layout;
+    std::shared_ptr<miqu::ListView> m_list_view;
+    std::vector<unsigned int> m_song_positions;
     std::function<void(unsigned int)> m_on_song_clicked;
 };
 
