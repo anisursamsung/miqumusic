@@ -142,13 +142,17 @@ void MusicApp::setup_ui() {
         ->addItem("Library", "🎵")
         ->addItem("Artists", "👤")
         ->selectedIndex(0)
-        ->showDivider(true)
-        ->barHeight(58)
+        ->cornerRadius(24)
+        ->barHeight(56)
+        ->itemWidth(74)
+        ->showDivider(false)
         ->build();
     m_bottom_nav->set_layout_params(LayoutParams(
-        static_cast<int>(LayoutDimension::MatchParent),
-        58
+        static_cast<int>(LayoutDimension::WrapContent),
+        56,
+        Gravity::CenterHorizontal
     ));
+    m_bottom_nav->set_margin(16, 6, 16, 12);
     root_container->add_view(m_bottom_nav);
 
     m_nav_view->push(root_container, "Music", m_client->is_connected() ? "MPD • Connected" : "MPD • Offline", "root");
