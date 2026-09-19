@@ -93,7 +93,8 @@ void MusicApp::setup_ui() {
             refresh_all();
         })
         ->onClose([this]() {
-            quit();
+            if (m_window) m_window->request_close();
+            else quit();
         })
         ->build();
     m_toolbar->set_back_visible(false);
