@@ -138,10 +138,10 @@ void MusicApp::setup_ui() {
 
     // 3. Master Bottom Navigation Bar
     m_bottom_nav = BottomNavigationViewBuilder::create()
-        ->addItem("Player", "▶")
-        ->addItem("Queue", "☰")
-        ->addItem("Library", "🎵")
-        ->addItem("Artists", "👤")
+        ->addItem("Player", "media-playback-start")
+        ->addItem("Queue", "view-list-symbolic")
+        ->addItem("Library", "audio-x-generic")
+        ->addItem("Artists", "system-users")
         ->selectedIndex(0)
         ->cornerRadius(24)
         ->barHeight(56)
