@@ -20,8 +20,19 @@ int main(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg == "-h" || arg == "--help") {
-            std::cout << "Usage: miqumusic\n\n"
-                      << "Modern native MPD music player built with miqutoolkit.\n";
+            std::cout << "Usage: miqumusic [OPTIONS]\n\n"
+                      << "Modern native MPD music player built with miqutoolkit.\n\n"
+                      << "Options:\n"
+                      << "  -h, --help         Show this help message and exit\n"
+                      << "  --init-config      Generate default user configuration file\n";
+            return 0;
+        } else if (arg == "--init-config") {
+            std::string res = Config::init_user_config("miqumusic", "miqumusic.conf");
+            if (!res.empty()) {
+                std::cout << "[miqumusic] Configuration initialized at: " << res << "\n";
+            } else {
+                std::cout << "[miqumusic] Configuration file already exists or could not be created.\n";
+            }
             return 0;
         }
     }
@@ -32,13 +43,14 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // 1. Resolve and bootstrap configuration file
-    std::string user_conf = Config::ensure_user_config("miqumusic", "miqumusic.conf");
+    // 1. Resolve user configuration file if present (no auto-seeding on startup)
+    std::string user_cfg_dir = FsUtils::get_user_config_dir("miqumusic");
     std::string target_conf;
-    if (!user_conf.empty() && fs::exists(user_conf)) {
-        target_conf = user_conf;
-    } else if (fs::exists("/usr/share/miqumusic/miqumusic.conf")) {
-        target_conf = "/usr/share/miqumusic/miqumusic.conf";
+    if (!user_cfg_dir.empty()) {
+        std::string p = user_cfg_dir + "/miqumusic.conf";
+        if (fs::exists(p)) {
+            target_conf = p;
+        }
     }
 
     std::string host = "";
@@ -47,6 +59,7 @@ int main(int argc, char** argv) {
     if (!target_conf.empty()) {
         // Overlay any toolkit appearance overrides (colors, fonts, metrics, icon_theme)
         Config::get()->load_from_file(target_conf);
+        engine->setup_config_watcher();
 
         // Read MPD connection options
         std::ifstream file(target_conf);
